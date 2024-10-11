@@ -9,6 +9,7 @@ class KText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.textAlign,
+    this.padding,
   });
 
   final String text;
@@ -16,20 +17,24 @@ class KText extends StatelessWidget {
   final int? maxLines;
   final TextOverflow? overflow;
   final TextAlign? textAlign;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: textStyle ??
-          const TextStyle(
-            fontSize: 20,
-            fontFamily: FontFamily.sVNGilroy,
-            fontWeight: FontWeight.w400,
-          ),
-      maxLines: maxLines,
-      overflow: overflow,
-      textAlign: textAlign,
+    return Padding(
+      padding: padding ?? EdgeInsets.zero,
+      child: Text(
+        text,
+        style: textStyle ??
+            const TextStyle(
+              fontSize: 20,
+              fontFamily: FontFamily.sVNGilroy,
+              fontWeight: FontWeight.w400,
+            ),
+        maxLines: maxLines,
+        overflow: overflow,
+        textAlign: textAlign,
+      ),
     );
   }
 }

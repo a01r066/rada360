@@ -13,7 +13,7 @@ class Endpoints {
 
   // Otp
   static const String otp = '$apiPath/otp';
-  static const String createOtp = '$otp/create';
+  static const String createOtp = '$otp/create/';
   static const String verifyOtp = '$otp/verify/';
 
   // Register, login

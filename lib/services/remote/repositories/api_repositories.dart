@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:rada360/model/common/my_data_request.dart';
-import 'package:rada360/model/response/auth_data_response.dart';
 import 'package:rada360/model/response/common_data_response.dart';
+import 'package:rada360/model/response/sign_up_data_response.dart';
 import 'package:rada360/services/remote/network/api_result.dart';
 import 'package:rada360/services/remote/network/api_services.dart';
 import 'package:rada360/services/remote/network/dio/my_dio_exception.dart';
@@ -39,7 +39,7 @@ class ApiRepositories implements ApiServicesImpl {
   }
 
   @override
-  Future<ApiResult<AuthDataResponse, MyDioException>> signUp(
+  Future<ApiResult<SignUpDataResponse, MyDioException>> signUp(
       {required String endpoint, required FormData formData}) async {
     return apiServices.signUp(endpoint: endpoint, formData: formData);
   }
@@ -51,13 +51,13 @@ class ApiRepositories implements ApiServicesImpl {
   }
 
   @override
-  Future<ApiResult> createOtp(
+  Future<ApiResult<CommonDataResponse, MyDioException>> createOtp(
       {required String endpoint, required Map<String, dynamic> data}) {
     return apiServices.createOtp(endpoint: endpoint, data: data);
   }
 
   @override
-  Future<ApiResult> verifyOtp(
+  Future<ApiResult<CommonDataResponse, MyDioException>> verifyOtp(
       {required String endpoint, required Map<String, dynamic> data}) {
     return apiServices.verifyOtp(endpoint: endpoint, data: data);
   }

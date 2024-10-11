@@ -26,14 +26,14 @@ class _OnboardWidgetState extends State<OnboardWidget> {
       children: [
         KText(
           text: widget.pageInfo.title ?? "",
-          textStyle: KTextStyle.titleTextStyle,
+          textStyle: KTextStyle.titleTextStyle(),
           maxLines: 2,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 12),
         KText(
           text: widget.pageInfo.description ?? "",
-          textStyle: KTextStyle.descriptionTextStyle,
+          textStyle: KTextStyle.descTextStyle(),
           maxLines: 4,
           textAlign: TextAlign.center,
         ),

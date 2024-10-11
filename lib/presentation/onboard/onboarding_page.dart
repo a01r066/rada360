@@ -131,12 +131,12 @@ class _OnboardingPageState extends State<OnboardingPage>
                 child: ElevatedButton(
                     style: ButtonStyle(
                         backgroundColor:
-                            WidgetStateProperty.all(MyColors.mainColor),
+                            WidgetStateProperty.all(MyColors.buttonColor),
                         padding: WidgetStateProperty.all(
                             const EdgeInsets.symmetric(vertical: 12))),
                     onPressed: () {
                       Navigator.of(context)
-                          .pushReplacementNamed(RoutePaths.signInPage);
+                          .pushReplacementNamed(RoutePaths.phoneInputPage);
                     },
                     child: const KText(
                       text: "Đăng ký/Đăng nhập",

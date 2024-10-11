@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rada360/common/mixins/loading_view.dart';
-import 'package:rada360/common/utils/my_logger.dart';
 import 'package:rada360/common/values/dimens.dart';
+import 'package:rada360/config/routes.dart';
 import 'package:rada360/config/services_locator.dart';
 import 'package:rada360/gen/assets.gen.dart';
 import 'package:rada360/model/common/app_state_status.dart';
-import 'package:rada360/presentation/auth/sign_in/sign_in_cubit.dart';
+import 'package:rada360/presentation/auth/phone_input//phone_input_cubit.dart';
 import 'package:rada360/presentation/common/k_elevated_button.dart';
 import 'package:rada360/presentation/common/k_text.dart';
 import 'package:rada360/presentation/common/k_text_style.dart';
 import 'package:rada360/services/remote/network/endpoints.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class PhoneInputPage extends StatefulWidget {
+  const PhoneInputPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<PhoneInputPage> createState() => _PhoneInputPageState();
 }
 
-class _SignInPageState extends State<SignInPage> with LoadingViewMixin {
-  SignInCubit signInCubit = SignInCubit(apiRepositories: locator.get());
+class _PhoneInputPageState extends State<PhoneInputPage> with LoadingViewMixin {
+  PhoneInputCubit signInCubit = PhoneInputCubit(apiRepositories: locator.get());
 
   TextEditingController textEditingController = TextEditingController();
 
@@ -28,12 +28,14 @@ class _SignInPageState extends State<SignInPage> with LoadingViewMixin {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => signInCubit,
-      child: BlocConsumer<SignInCubit, SignInState>(
+      child: BlocConsumer<PhoneInputCubit, PhoneInputState>(
         listener: (context, state) {
-          MyLogger.info("SignInState: ${state.status}");
-          state.status == AppStateStatus.loading
-              ? showLoading()
-              : dismissLoading();
+          // state.status == AppStateStatus.loading
+          //     ? showLoading()
+          //     : dismissLoading();
+          if (state.status == AppStateStatus.success) {
+            Navigator.of(context).pushNamed(RoutePaths.otpPage);
+          }
         },
         builder: (context, state) {
           return Scaffold(
@@ -65,14 +67,14 @@ class _SignInPageState extends State<SignInPage> with LoadingViewMixin {
         children: [
           KText(
             text: "Đăng ký/Đăng nhập",
-            textStyle: KTextStyle.titleTextStyle,
+            textStyle: KTextStyle.titleTextStyle(),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: Dimens.vertical),
             child: KText(
               text:
                   "Chào bạn, vui lòng nhập số điện thoại để đăng ký/đăng nhập",
-              textStyle: KTextStyle.descriptionTextStyle,
+              textStyle: KTextStyle.descTextStyle(),
               textAlign: TextAlign.center,
             ),
           ),
@@ -101,7 +103,7 @@ class _SignInPageState extends State<SignInPage> with LoadingViewMixin {
                               BorderSide(width: 1, color: Color(0xFFE8E8E8))),
                       hintText: 'Nhập số điện thoại',
                       prefixIcon: Image.asset(Assets.icons.icMobile.path),
-                      labelStyle: KTextStyle.descriptionTextStyle,
+                      labelStyle: KTextStyle.descTextStyle(),
                     ),
                   ),
                 ],
@@ -111,20 +113,15 @@ class _SignInPageState extends State<SignInPage> with LoadingViewMixin {
           KElevatedButton(
             text: "Tiếp Tục",
             onPressed: () {
-              // Navigator.of(context).pushNamed(RoutePaths.otpPage);
-              // Map<String, dynamic> data = {
-              //   'phone_number': textEditingController.text.trim(),
-              //   'password': '123456'
-              // };
-              // signInCubit.signIn(endpoint: Endpoints.signIn, data: data);
-              final data = {'phone': textEditingController.text.trim()};
+              // final data = {'phone': textEditingController.text.trim()};
+              final data = {'phone': '0123456789'};
               signInCubit.createOtp(endpoint: Endpoints.createOtp, data: data);
             },
           ),
-          const KText(
+          KText(
             text:
                 "Bằng việc tiếp tục, bạn đã đồng ý với Quy chế sử dụng dịch vụ của chúng tôi",
-            textStyle: TextStyle(
+            textStyle: KTextStyle.customTextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w400,
             ),

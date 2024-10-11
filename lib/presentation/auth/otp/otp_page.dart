@@ -5,6 +5,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:rada360/common/utils/my_logger.dart';
 import 'package:rada360/common/values/my_colors.dart';
 import 'package:rada360/common/values/my_devices.dart';
+import 'package:rada360/config/routes.dart';
 import 'package:rada360/presentation/common/k_elevated_button.dart';
 import 'package:rada360/presentation/common/k_text.dart';
 import 'package:rada360/presentation/common/k_text_style.dart';
@@ -56,18 +57,18 @@ class _OtpPageState extends State<OtpPage> {
         children: [
           KText(
             text: "Xác thực số điện thoại",
-            textStyle: KTextStyle.titleTextStyle,
+            textStyle: KTextStyle.titleTextStyle(),
             textAlign: TextAlign.center,
           ),
           KText(
             text: "Vui lòng nhập mã OTP được gửi đến SĐT 0967 567 765",
-            textStyle: KTextStyle.descriptionTextStyle,
+            textStyle: KTextStyle.descTextStyle(),
             textAlign: TextAlign.center,
           ),
           _pinCode(),
           KElevatedButton(
             text: "Gửi lại OTP (00:30)",
-            backgroundColor: MyColors.mainColor.withOpacity(.2),
+            backgroundColor: MyColors.buttonColor.withOpacity(.2),
             onPressed: () {
               MyLogger.info("resent otp");
             },
@@ -135,6 +136,7 @@ class _OtpPageState extends State<OtpPage> {
           ],
           onCompleted: (v) {
             debugPrint("Completed");
+            Navigator.of(context).pushNamed(RoutePaths.registerSignInPage);
           },
           // onTap: () {
           //   print("Pressed");

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:rada360/model/common/my_data_request.dart';
 import 'package:rada360/model/response/auth_data_response.dart';
 import 'package:rada360/model/response/common_data_response.dart';
+import 'package:rada360/model/response/sign_up_data_response.dart';
 import 'package:rada360/services/remote/network/api_result.dart';
 import 'package:rada360/services/remote/network/dio/dio_client.dart';
 import 'package:rada360/services/remote/network/dio/my_dio_exception.dart';
@@ -68,11 +69,11 @@ class ApiServices implements ApiServicesImpl {
   }
 
   @override
-  Future<ApiResult<AuthDataResponse, MyDioException>> signUp(
+  Future<ApiResult<SignUpDataResponse, MyDioException>> signUp(
       {required String endpoint, required FormData formData}) async {
     try {
       final response = await dioClient.post(endpoint, data: formData);
-      return ApiResult(response: AuthDataResponse.fromMap(response.data));
+      return ApiResult(response: SignUpDataResponse.fromMap(response.data));
     } on DioException catch (e) {
       return ApiResult(exception: MyDioException.fromDioError(e));
     }
@@ -90,22 +91,22 @@ class ApiServices implements ApiServicesImpl {
   }
 
   @override
-  Future<ApiResult<Map<String, dynamic>, MyDioException>> createOtp(
+  Future<ApiResult<CommonDataResponse, MyDioException>> createOtp(
       {required String endpoint, required Map<String, dynamic> data}) async {
     try {
       final response = await dioClient.post(endpoint, data: data);
-      return ApiResult(response: response.data);
+      return ApiResult(response: CommonDataResponse.fromMap(response.data));
     } on DioException catch (e) {
       return ApiResult(exception: MyDioException.fromDioError(e));
     }
   }
 
   @override
-  Future<ApiResult> verifyOtp(
+  Future<ApiResult<CommonDataResponse, MyDioException>> verifyOtp(
       {required String endpoint, required Map<String, dynamic> data}) async {
     try {
       final response = await dioClient.post(endpoint, data: data);
-      return ApiResult(response: response.data);
+      return ApiResult(response: CommonDataResponse.fromMap(response.data));
     } on DioException catch (e) {
       return ApiResult(exception: MyDioException.fromDioError(e));
     }

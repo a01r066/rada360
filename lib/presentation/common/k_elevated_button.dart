@@ -22,7 +22,7 @@ class KElevatedButton extends StatelessWidget {
       child: ElevatedButton(
           style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all(
-                  backgroundColor ?? MyColors.mainColor),
+                  backgroundColor ?? MyColors.buttonColor),
               padding: WidgetStateProperty.all(
                   const EdgeInsets.symmetric(vertical: 12))),
           onPressed: onPressed,

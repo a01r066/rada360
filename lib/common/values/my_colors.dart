@@ -14,5 +14,8 @@ class MyColors {
   static const Color darkPrimaryColor = Color(0xFF000000);
 
   /// Light theme color
-  static const Color mainColor = Color(0xFFCE9296);
+  static const Color buttonColor = Color(0xFFCE9296);
+  static const Color titleTextColor = Color(0xFF292929);
+  static const Color descTextColor = Color(0xFF7A7A7A);
+  static const Color optionsColor = Color(0xFFCE9296);
 }
