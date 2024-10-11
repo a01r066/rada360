@@ -8,7 +8,7 @@ class AuthorizationInterceptor extends Interceptor {
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     if (_needAuthorizationHeader(options)) {
-      options.headers['Authorization'] = 'Bearer $idTokenGlb';
+      options.headers['Authorization'] = 'Bearer $accessTokenGlb';
     }
     super.onRequest(options, handler);
   }

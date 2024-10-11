@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:viez_universe/src/common/utils/network_utils.dart';
 
 class NetworkException implements Exception {
   String message;
@@ -42,10 +41,6 @@ class NetworkException implements Exception {
   }
 
   static Future<NetworkException> getNetworkException(error) async {
-    var isNetworkAvailable = await NetworkUtils.isNetworkAvailable();
-    if (!isNetworkAvailable) {
-      return NetworkException("không có kết nối Internet");
-    }
     if (error is NetworkException) return error;
     if (error is Exception) {
       try {

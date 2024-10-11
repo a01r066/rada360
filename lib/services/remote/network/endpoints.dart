@@ -8,12 +8,20 @@ class Endpoints {
 
   static const int connectionTimeout = 3000;
 
+  // Access token
+  static const String accessToken = '/api/accessToken';
+
+  // Otp
+  static const String otp = '$apiPath/otp';
+  static const String createOtp = '$otp/create';
+  static const String verifyOtp = '$otp/verify/';
+
   // Register, login
-  static const String user = '/user';
-  static const String signUp = '/signup';
-  static const String signIn = '/signin';
-  static const String logout = '/logout';
-  static const String profile = '/profile';
+  static const String user = '$apiPath/user';
+  static const String signUp = '$user/signup/';
+  static const String signIn = '$user/signin/';
+  static const String logout = '$user/logout';
+  static const String profile = '$user/profile';
 
   // Authentication
   static const String forgetPassword = '/api/auth/forget-password';

@@ -1,10 +1,32 @@
 part of 'main_cubit.dart';
 
-sealed class MainState extends Equatable {
-  const MainState();
-}
+class MainState extends Equatable {
+  const MainState({
+    required this.status,
+    this.dataResponse,
+    this.exception,
+  });
 
-final class MainInitial extends MainState {
+  final AppStateStatus status;
+  final CommonDataResponse? dataResponse;
+  final MyDioException? exception;
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [status];
+
+  factory MainState.initial() {
+    return const MainState(status: AppStateStatus.initial);
+  }
+
+  MainState copyWith({
+    AppStateStatus? status,
+    CommonDataResponse? dataResponse,
+    MyDioException? exception,
+  }) {
+    return MainState(
+      status: status ?? this.status,
+      dataResponse: dataResponse ?? this.dataResponse,
+      exception: exception ?? this.exception,
+    );
+  }
 }

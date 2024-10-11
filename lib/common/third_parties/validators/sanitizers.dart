@@ -1,4 +1,4 @@
-import 'package:validators/validators.dart';
+import 'package:rada360/common/third_parties/validators/validators.dart';
 
 import 'src/helpers.dart';
 
@@ -6,7 +6,7 @@ Map _default_normalize_email_options = {'lowercase': true};
 
 /// convert the input to a string
 String toString(input) {
-  if (input == null || (input is List && input.length == 0)) {
+  if (input == null || (input is List && input.isEmpty)) {
     input = '';
   }
   return input.toString();
@@ -36,7 +36,7 @@ double toDouble(String str) {
 }
 
 /// convert the input to an integer, or NAN if the input is not an integer
-num toInt(String str, {int radix: 10}) {
+num toInt(String str, {int radix = 10}) {
   try {
     return int.parse(str, radix: radix);
   } catch (e) {
@@ -61,19 +61,20 @@ bool toBoolean(String str, [bool? strict]) {
 
 /// trim characters (whitespace by default) from both sides of the input
 String trim(String str, [String? chars]) {
-  RegExp pattern = (chars != null) ? new RegExp('^[$chars]+|[$chars]+\$') : new RegExp(r'^\s+|\s+$');
+  RegExp pattern =
+      (chars != null) ? RegExp('^[$chars]+|[$chars]+\$') : RegExp(r'^\s+|\s+$');
   return str.replaceAll(pattern, '');
 }
 
 /// trim characters from the left-side of the input
 String ltrim(String str, [String? chars]) {
-  var pattern = chars != null ? new RegExp('^[$chars]+') : new RegExp(r'^\s+');
+  var pattern = chars != null ? RegExp('^[$chars]+') : RegExp(r'^\s+');
   return str.replaceAll(pattern, '');
 }
 
 /// trim characters from the right-side of the input
 String rtrim(String str, [String? chars]) {
-  var pattern = chars != null ? new RegExp('[$chars]+\$') : new RegExp(r'\s+$');
+  var pattern = chars != null ? RegExp('[$chars]+\$') : RegExp(r'\s+$');
   return str.replaceAll(pattern, '');
 }
 
@@ -82,7 +83,7 @@ String rtrim(String str, [String? chars]) {
 /// The characters are used in a RegExp and so you will need to escape
 /// some chars.
 String whitelist(String str, String chars) {
-  return str.replaceAll(new RegExp('[^' + chars + ']+'), '');
+  return str.replaceAll(RegExp('[^$chars]+'), '');
 }
 
 /// remove characters that appear in the blacklist.
@@ -90,7 +91,7 @@ String whitelist(String str, String chars) {
 /// The characters are used in a RegExp and so you will need to escape
 /// some chars.
 String blacklist(String str, String chars) {
-  return str.replaceAll(new RegExp('[' + chars + ']+'), '');
+  return str.replaceAll(RegExp('[$chars]+'), '');
 }
 
 /// remove characters with a numerical value < 32 and 127.
@@ -98,18 +99,20 @@ String blacklist(String str, String chars) {
 /// If `keep_new_lines` is `true`, newline characters are preserved
 /// `(\n and \r, hex 0xA and 0xD)`.
 String stripLow(String str, [bool? keep_new_lines]) {
-  String chars = keep_new_lines == true ? '\x00-\x09\x0B\x0C\x0E-\x1F\x7F' : '\x00-\x1F\x7F';
+  String chars = keep_new_lines == true
+      ? '\x00-\x09\x0B\x0C\x0E-\x1F\x7F'
+      : '\x00-\x1F\x7F';
   return blacklist(str, chars);
 }
 
 /// replace `<`, `>`, `&`, `'` and `"` with HTML entities
 String escape(String str) {
   return (str
-      .replaceAll(new RegExp(r'&'), '&amp;')
-      .replaceAll(new RegExp(r'"'), '&quot;')
-      .replaceAll(new RegExp(r"'"), '&#x27;')
-      .replaceAll(new RegExp(r'<'), '&lt;')
-      .replaceAll(new RegExp(r'>'), '&gt;'));
+      .replaceAll(RegExp(r'&'), '&amp;')
+      .replaceAll(RegExp(r'"'), '&quot;')
+      .replaceAll(RegExp(r"'"), '&#x27;')
+      .replaceAll(RegExp(r'<'), '&lt;')
+      .replaceAll(RegExp(r'>'), '&gt;'));
 }
 
 /// canonicalize an email address.

@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rada360/common/mixins/loading_view.dart';
+import 'package:rada360/common/utils/my_logger.dart';
 import 'package:rada360/common/values/dimens.dart';
-import 'package:rada360/config/routes.dart';
+import 'package:rada360/config/services_locator.dart';
 import 'package:rada360/gen/assets.gen.dart';
+import 'package:rada360/model/common/app_state_status.dart';
+import 'package:rada360/presentation/auth/sign_in/sign_in_cubit.dart';
 import 'package:rada360/presentation/common/k_elevated_button.dart';
 import 'package:rada360/presentation/common/k_text.dart';
 import 'package:rada360/presentation/common/k_text_style.dart';
+import 'package:rada360/services/remote/network/endpoints.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -13,25 +19,42 @@ class SignInPage extends StatefulWidget {
   State<SignInPage> createState() => _SignInPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignInPageState extends State<SignInPage> with LoadingViewMixin {
+  SignInCubit signInCubit = SignInCubit(apiRepositories: locator.get());
+
+  TextEditingController textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          TextButton(
-              onPressed: () {},
-              child: const KText(
-                text: "Để sau",
-                textStyle: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFFB8B8B8),
-                ),
-              )),
-        ],
+    return BlocProvider(
+      create: (context) => signInCubit,
+      child: BlocConsumer<SignInCubit, SignInState>(
+        listener: (context, state) {
+          MyLogger.info("SignInState: ${state.status}");
+          state.status == AppStateStatus.loading
+              ? showLoading()
+              : dismissLoading();
+        },
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              actions: [
+                TextButton(
+                    onPressed: () {},
+                    child: const KText(
+                      text: "Để sau",
+                      textStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFFB8B8B8),
+                      ),
+                    )),
+              ],
+            ),
+            body: _buildBody(),
+          );
+        },
       ),
-      body: _buildBody(),
     );
   }
 
@@ -65,6 +88,7 @@ class _SignInPageState extends State<SignInPage> {
                         fontSize: 16, fontWeight: FontWeight.w400, height: 2.0),
                   ),
                   TextFormField(
+                    controller: textEditingController,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(
                           borderSide:
@@ -87,7 +111,14 @@ class _SignInPageState extends State<SignInPage> {
           KElevatedButton(
             text: "Tiếp Tục",
             onPressed: () {
-              Navigator.of(context).pushNamed(RoutePaths.otpPage);
+              // Navigator.of(context).pushNamed(RoutePaths.otpPage);
+              // Map<String, dynamic> data = {
+              //   'phone_number': textEditingController.text.trim(),
+              //   'password': '123456'
+              // };
+              // signInCubit.signIn(endpoint: Endpoints.signIn, data: data);
+              final data = {'phone': textEditingController.text.trim()};
+              signInCubit.createOtp(endpoint: Endpoints.createOtp, data: data);
             },
           ),
           const KText(
