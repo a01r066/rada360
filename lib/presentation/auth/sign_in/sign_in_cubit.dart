@@ -7,12 +7,12 @@ import 'package:rada360/model/response/sign_up_data_response.dart';
 import 'package:rada360/services/remote/network/dio/my_dio_exception.dart';
 import 'package:rada360/services/remote/repositories/api_repositories.dart';
 
-part 'register_sign_in_state.dart';
+part 'sign_in_state.dart';
 
-class RegisterSignInCubit extends Cubit<RegisterSignInState> {
-  RegisterSignInCubit({
+class SignInCubit extends Cubit<SignInState> {
+  SignInCubit({
     required this.apiRepositories,
-  }) : super(RegisterSignInState.initial());
+  }) : super(SignInState.initial());
 
   final ApiRepositories apiRepositories;
 

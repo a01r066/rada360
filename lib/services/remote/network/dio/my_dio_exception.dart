@@ -51,11 +51,12 @@ class MyDioException implements Exception {
   String _handleError(dynamic statusCode, dynamic error) {
     switch (statusCode) {
       case 400:
-        return '${error['error']}';
+        // return '${error['error']}';
+        return '${error['message']}';
       case 401:
-        return 'Unauthorized: ${error['error']}';
+        return 'Unauthorized: ${error['message']}';
       case 403:
-        return '${error['error']}';
+        return '${error['message']}';
       case 404:
         return 'Item not found!';
       case 500:

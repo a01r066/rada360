@@ -6,29 +6,39 @@ import 'package:rada360/common/values/my_colors.dart';
 import 'package:rada360/config/routes.dart';
 import 'package:rada360/config/services_locator.dart';
 import 'package:rada360/model/common/app_state_status.dart';
-import 'package:rada360/presentation/auth/register_sign_in/register_sign_in_cubit.dart';
+import 'package:rada360/presentation/auth/register/register_cubit.dart';
 import 'package:rada360/presentation/auth/widgets/pin_code_widget.dart';
 import 'package:rada360/presentation/common/k_elevated_button.dart';
 import 'package:rada360/presentation/common/k_text.dart';
 import 'package:rada360/presentation/common/k_text_style.dart';
 import 'package:rada360/services/remote/network/endpoints.dart';
 
-class RegisterSignInPage extends StatefulWidget {
-  const RegisterSignInPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({
+    super.key,
+    required this.phone,
+  });
+
+  final String phone;
 
   @override
-  State<RegisterSignInPage> createState() => _RegisterSignInPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterSignInPageState extends State<RegisterSignInPage> {
-  RegisterSignInCubit registerSignInCubit =
-      RegisterSignInCubit(apiRepositories: locator.get());
+class _RegisterPageState extends State<RegisterPage> {
+  RegisterCubit registerSignInCubit =
+      RegisterCubit(apiRepositories: locator.get());
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => registerSignInCubit,
-      child: BlocConsumer<RegisterSignInCubit, RegisterSignInState>(
+      child: BlocConsumer<RegisterCubit, RegisterState>(
         listener: (context, state) {
           if (state.status == AppStateStatus.success) {
             final signupDataResponse = state.signupDataResponse;

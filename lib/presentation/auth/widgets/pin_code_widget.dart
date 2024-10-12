@@ -36,6 +36,18 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
   final formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    errorController = StreamController<ErrorAnimationType>();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    errorController!.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Form(
       key: formKey,

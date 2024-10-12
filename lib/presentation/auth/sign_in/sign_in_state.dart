@@ -1,7 +1,7 @@
-part of 'register_sign_in_cubit.dart';
+part of 'sign_in_cubit.dart';
 
-class RegisterSignInState extends Equatable {
-  const RegisterSignInState({
+class SignInState extends Equatable {
+  const SignInState({
     required this.status,
     this.inputPinCode,
     this.errorMessage,
@@ -20,11 +20,11 @@ class RegisterSignInState extends Equatable {
   @override
   List<Object> get props => [status];
 
-  factory RegisterSignInState.initial() {
-    return const RegisterSignInState(status: AppStateStatus.initial);
+  factory SignInState.initial() {
+    return const SignInState(status: AppStateStatus.initial);
   }
 
-  RegisterSignInState copyWith({
+  SignInState copyWith({
     AppStateStatus? status,
     String? inputPinCode,
     String? errorMessage,
@@ -32,7 +32,7 @@ class RegisterSignInState extends Equatable {
     SignUpDataResponse? signupDataResponse,
     MyDioException? exception,
   }) {
-    return RegisterSignInState(
+    return SignInState(
       status: status ?? this.status,
       inputPinCode: inputPinCode ?? this.inputPinCode,
       errorMessage: errorMessage ?? this.errorMessage,

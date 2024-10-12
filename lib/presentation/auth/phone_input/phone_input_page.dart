@@ -34,7 +34,9 @@ class _PhoneInputPageState extends State<PhoneInputPage> with LoadingViewMixin {
           //     ? showLoading()
           //     : dismissLoading();
           if (state.status == AppStateStatus.success) {
-            Navigator.of(context).pushNamed(RoutePaths.otpPage);
+            final phone = textEditingController.text.trim();
+            Navigator.of(context)
+                .pushNamed(RoutePaths.otpPage, arguments: phone);
           }
         },
         builder: (context, state) {
@@ -113,8 +115,8 @@ class _PhoneInputPageState extends State<PhoneInputPage> with LoadingViewMixin {
           KElevatedButton(
             text: "Tiếp Tục",
             onPressed: () {
-              // final data = {'phone': textEditingController.text.trim()};
-              final data = {'phone': '0123456789'};
+              final data = {'phone': textEditingController.text.trim()};
+              // final data = {'phone': '0123456789'};
               signInCubit.createOtp(endpoint: Endpoints.createOtp, data: data);
             },
           ),

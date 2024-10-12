@@ -5,4 +5,5 @@ enum AppStateStatus {
   error,
   updating,
   updated,
+  done,
 }
