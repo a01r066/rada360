@@ -7,8 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:rada360/common/utils/my_logger.dart';
-import 'package:rada360/common/values/global_variables.dart';
 import 'package:rada360/config/routes.dart';
 import 'package:rada360/config/services_locator.dart';
 import 'package:rada360/gen/localization/l10n.dart';
@@ -43,7 +41,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
-  MainCubit mainCubit = MainCubit(apiRepositories: locator.get());
+  MainCubit mainCubit =
+      MainCubit(apiRepositories: locator.get(), prefRepository: locator.get());
 
   @override
   void initState() {
@@ -65,10 +64,7 @@ class _MyAppState extends State<MyApp> {
       ],
       child: BlocConsumer<MainCubit, MainState>(
         listener: (context, state) {
-          if (state.status == AppStateStatus.success) {
-            accessTokenGlb = state.dataResponse?.data?['token'];
-            MyLogger.info("accessToken: $accessTokenGlb");
-          }
+          if (state.status == AppStateStatus.success) {}
         },
         builder: (context, state) {
           return MaterialApp(

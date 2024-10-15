@@ -5,6 +5,7 @@ class PrefRepositoryKeys {
   static const String theme = 'theme';
   static const String locale = 'locale';
   static const String showOnboarding = "showOnboarding";
+  static const String signInToken = "signInToken";
 }
 
 class PrefRepository {
@@ -35,5 +36,14 @@ class PrefRepository {
 
   finishOnboarding() async {
     return preferences.setBool(PrefRepositoryKeys.showOnboarding, false);
+  }
+
+  // Sign in
+  setSignInToken(String token) async {
+    return preferences.setString(PrefRepositoryKeys.signInToken, token);
+  }
+
+  Future<String?> getSignInToken() async {
+    return preferences.getString(PrefRepositoryKeys.signInToken);
   }
 }

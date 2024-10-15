@@ -6,7 +6,9 @@ class SignInState extends Equatable {
     this.inputPinCode,
     this.errorMessage,
     this.hasMatched,
-    this.signupDataResponse,
+    this.signInDataResponse,
+    this.otpDataResponse,
+    this.counter,
     this.exception,
   });
 
@@ -14,7 +16,9 @@ class SignInState extends Equatable {
   final String? inputPinCode;
   final String? errorMessage;
   final bool? hasMatched;
-  final SignUpDataResponse? signupDataResponse;
+  final CommonDataResponse? signInDataResponse;
+  final CommonDataResponse? otpDataResponse;
+  final int? counter;
   final MyDioException? exception;
 
   @override
@@ -29,7 +33,9 @@ class SignInState extends Equatable {
     String? inputPinCode,
     String? errorMessage,
     bool? hasMatched,
-    SignUpDataResponse? signupDataResponse,
+    CommonDataResponse? signInDataResponse,
+    CommonDataResponse? otpDataResponse,
+    int? counter,
     MyDioException? exception,
   }) {
     return SignInState(
@@ -37,7 +43,9 @@ class SignInState extends Equatable {
       inputPinCode: inputPinCode ?? this.inputPinCode,
       errorMessage: errorMessage ?? this.errorMessage,
       hasMatched: hasMatched ?? this.hasMatched,
-      signupDataResponse: signupDataResponse ?? this.signupDataResponse,
+      signInDataResponse: signInDataResponse ?? this.signInDataResponse,
+      otpDataResponse: otpDataResponse ?? this.otpDataResponse,
+      counter: counter ?? this.counter,
       exception: exception ?? this.exception,
     );
   }

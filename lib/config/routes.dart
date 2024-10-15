@@ -6,6 +6,7 @@ import 'package:rada360/presentation/auth/sign_in/sign_in_page.dart';
 import 'package:rada360/presentation/home_controller/home_controller_page.dart';
 import 'package:rada360/presentation/onboard/onboarding_page.dart';
 import 'package:rada360/presentation/survey/survey_page.dart';
+import 'package:tuple/tuple.dart';
 
 class RoutePaths {
   static const String onBoardingPage = "/onBoardingPage";
@@ -31,8 +32,10 @@ class Routes {
       case RoutePaths.phoneInputPage:
         return _materialRoute(const PhoneInputPage(), settings);
       case RoutePaths.otpPage:
-        final phone = settings.arguments as String;
-        return _materialRoute(OtpPage(phone: phone), settings);
+        // Item 1: phone
+        // Item 2: RoutePath
+        final phoneData = settings.arguments as Tuple2<String, String?>;
+        return _materialRoute(OtpPage(phoneData: phoneData), settings);
       case RoutePaths.signInPage:
         final phone = settings.arguments as String;
         return _materialRoute(SignInPage(phone: phone), settings);

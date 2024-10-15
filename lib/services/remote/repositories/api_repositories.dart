@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:rada360/model/common/my_data_request.dart';
+import 'package:rada360/model/response/auth_data_response.dart';
 import 'package:rada360/model/response/common_data_response.dart';
 import 'package:rada360/model/response/sign_up_data_response.dart';
 import 'package:rada360/services/remote/network/api_result.dart';
@@ -14,10 +15,9 @@ class ApiRepositories implements ApiServicesImpl {
   });
 
   @override
-  Future<ApiResult> forgetPassword(
-      {required String endpoint, required MyDataRequest request}) {
-    // TODO: implement forgetPassword
-    throw UnimplementedError();
+  Future<ApiResult<AuthDataResponse, MyDioException>> forgetPassword(
+      {required String endpoint, required MyDataRequest request}) async {
+    return apiServices.forgetPassword(endpoint: endpoint, request: request);
   }
 
   @override
@@ -33,7 +33,7 @@ class ApiRepositories implements ApiServicesImpl {
   }
 
   @override
-  Future<ApiResult> signIn(
+  Future<ApiResult<CommonDataResponse, MyDioException>> signIn(
       {required String endpoint, required Map<String, dynamic> data}) async {
     return apiServices.signIn(endpoint: endpoint, data: data);
   }

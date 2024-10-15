@@ -41,12 +41,11 @@ class _RegisterPageState extends State<RegisterPage> {
       child: BlocConsumer<RegisterCubit, RegisterState>(
         listener: (context, state) {
           if (state.status == AppStateStatus.success) {
-            final signupDataResponse = state.signupDataResponse;
-            if (signupDataResponse?.success == true) {
-              MyLogger.info("message: ${signupDataResponse?.data.toString()}");
+            final dataResponse = state.dataResponse;
+            if (dataResponse?.success == true) {
               Navigator.of(context).pushNamed(RoutePaths.surveyPage);
             } else {
-              MyLogger.info("message: ${signupDataResponse?.message}");
+              MyLogger.info("message: ${dataResponse?.message}");
             }
           }
         },
@@ -111,10 +110,9 @@ class _RegisterPageState extends State<RegisterPage> {
               onPressed: () {
                 final password = registerSignInCubit.state.inputPinCode;
                 FormData formData = FormData.fromMap({
-                  'phone_number': '0902989196',
+                  'phone_number': widget.phone,
                   'password': password,
                   'password_confirmation': password,
-                  'gender': 'Nam'
                 });
                 registerSignInCubit.signUp(
                     endpoint: Endpoints.signUp, formData: formData);

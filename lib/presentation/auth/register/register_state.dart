@@ -6,7 +6,7 @@ class RegisterState extends Equatable {
     this.inputPinCode,
     this.errorMessage,
     this.hasMatched,
-    this.signupDataResponse,
+    this.dataResponse,
     this.exception,
   });
 
@@ -14,7 +14,7 @@ class RegisterState extends Equatable {
   final String? inputPinCode;
   final String? errorMessage;
   final bool? hasMatched;
-  final SignUpDataResponse? signupDataResponse;
+  final SignUpDataResponse? dataResponse;
   final MyDioException? exception;
 
   @override
@@ -29,7 +29,7 @@ class RegisterState extends Equatable {
     String? inputPinCode,
     String? errorMessage,
     bool? hasMatched,
-    SignUpDataResponse? signupDataResponse,
+    SignUpDataResponse? dataResponse,
     MyDioException? exception,
   }) {
     return RegisterState(
@@ -37,7 +37,7 @@ class RegisterState extends Equatable {
       inputPinCode: inputPinCode ?? this.inputPinCode,
       errorMessage: errorMessage ?? this.errorMessage,
       hasMatched: hasMatched ?? this.hasMatched,
-      signupDataResponse: signupDataResponse ?? this.signupDataResponse,
+      dataResponse: dataResponse ?? this.dataResponse,
       exception: exception ?? this.exception,
     );
   }

@@ -4,6 +4,7 @@ class OtpState extends Equatable {
   const OtpState({
     required this.status,
     this.dataResponse,
+    this.otpDataResponse,
     this.isCompleted,
     this.isExpired,
     this.errorMessage,
@@ -12,6 +13,7 @@ class OtpState extends Equatable {
 
   final AppStateStatus status;
   final CommonDataResponse? dataResponse;
+  final CommonDataResponse? otpDataResponse;
   final bool? isCompleted;
   final bool? isExpired;
   final String? errorMessage;
@@ -27,6 +29,7 @@ class OtpState extends Equatable {
   OtpState copyWith({
     AppStateStatus? status,
     CommonDataResponse? dataResponse,
+    CommonDataResponse? otpDataResponse,
     bool? isCompleted,
     bool? isExpired,
     String? errorMessage,
@@ -35,6 +38,7 @@ class OtpState extends Equatable {
     return OtpState(
       status: status ?? this.status,
       dataResponse: dataResponse ?? this.dataResponse,
+      otpDataResponse: otpDataResponse ?? this.otpDataResponse,
       isCompleted: isCompleted ?? this.isCompleted,
       isExpired: isExpired ?? this.isExpired,
       errorMessage: errorMessage ?? this.errorMessage,

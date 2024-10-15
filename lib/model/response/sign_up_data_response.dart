@@ -1,3 +1,6 @@
+import 'package:rada360/common/extensions/date_ext.dart';
+import 'package:rada360/common/utils/datetime_utils.dart';
+
 class SignUpDataResponse {
   final bool? success;
   final UserData? data;
@@ -58,8 +61,8 @@ class UserData {
       'phone_number': phoneNumber,
       'gender': gender,
       'avatar': avatar,
-      'updated_at': updatedAt,
-      'created_at': createdAt,
+      'updated_at': updatedAt?.toDateTimeString,
+      'created_at': createdAt?.toDateTimeString(),
       'id': id,
     };
   }
@@ -69,8 +72,12 @@ class UserData {
       phoneNumber: map['phone_number'],
       gender: map['gender'],
       avatar: map['avatar'],
-      updatedAt: map['updated_at'] as DateTime,
-      createdAt: map['created_at'] as DateTime,
+      updatedAt: map['updated_at'] != null
+          ? DateTimeUtils.convertToDateFromString(map['updated_at'])
+          : null,
+      createdAt: map['created_at'] != null
+          ? DateTimeUtils.convertToDateFromString(map['created_at'])
+          : null,
       id: map['id'],
     );
   }

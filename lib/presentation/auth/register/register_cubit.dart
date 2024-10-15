@@ -50,9 +50,15 @@ class RegisterCubit extends Cubit<RegisterState> {
     final response =
         await apiRepositories.signUp(endpoint: endpoint, formData: formData);
     if (response.isSuccessful() && response.response != null) {
+      String? errorMessage;
+      if (response.response?.success == false) {
+        errorMessage = response.response?.message;
+      }
       emit(state.copyWith(
-          status: AppStateStatus.success,
-          signupDataResponse: response.response));
+        status: AppStateStatus.success,
+        dataResponse: response.response,
+        errorMessage: errorMessage,
+      ));
     } else {
       emit(state.copyWith(
           status: AppStateStatus.error, exception: response.exception));

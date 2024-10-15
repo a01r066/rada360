@@ -11,6 +11,7 @@ import 'package:rada360/presentation/common/k_elevated_button.dart';
 import 'package:rada360/presentation/common/k_text.dart';
 import 'package:rada360/presentation/common/k_text_style.dart';
 import 'package:rada360/services/remote/network/endpoints.dart';
+import 'package:tuple/tuple.dart';
 
 class PhoneInputPage extends StatefulWidget {
   const PhoneInputPage({super.key});
@@ -36,7 +37,7 @@ class _PhoneInputPageState extends State<PhoneInputPage> with LoadingViewMixin {
           if (state.status == AppStateStatus.success) {
             final phone = textEditingController.text.trim();
             Navigator.of(context)
-                .pushNamed(RoutePaths.otpPage, arguments: phone);
+                .pushNamed(RoutePaths.otpPage, arguments: Tuple2(phone, null));
           }
         },
         builder: (context, state) {

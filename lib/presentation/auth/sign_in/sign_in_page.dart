@@ -1,7 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rada360/common/utils/my_logger.dart';
 import 'package:rada360/common/values/my_colors.dart';
 import 'package:rada360/config/routes.dart';
 import 'package:rada360/config/services_locator.dart';
@@ -12,6 +10,7 @@ import 'package:rada360/presentation/common/k_elevated_button.dart';
 import 'package:rada360/presentation/common/k_text.dart';
 import 'package:rada360/presentation/common/k_text_style.dart';
 import 'package:rada360/services/remote/network/endpoints.dart';
+import 'package:tuple/tuple.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({
@@ -26,7 +25,10 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  SignInCubit signInCubit = SignInCubit(apiRepositories: locator.get());
+  SignInCubit signInCubit = SignInCubit(
+      apiRepositories: locator.get(), prefRepository: locator.get());
+
+  TextEditingController textEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -40,13 +42,15 @@ class _SignInPageState extends State<SignInPage> {
       child: BlocConsumer<SignInCubit, SignInState>(
         listener: (context, state) {
           if (state.status == AppStateStatus.success) {
-            final signupDataResponse = state.signupDataResponse;
-            if (signupDataResponse?.success == true) {
-              MyLogger.info("message: ${signupDataResponse?.data.toString()}");
-              Navigator.of(context).pushNamed(RoutePaths.surveyPage);
-            } else {
-              MyLogger.info("message: ${signupDataResponse?.message}");
-            }
+            final response = state.signInDataResponse;
+            final token = response?.data?['token'];
+            signInCubit.setSignInToken(token);
+            Navigator.of(context).pushNamed(RoutePaths.surveyPage);
+          }
+
+          if (state.status == AppStateStatus.done) {
+            Navigator.of(context).pushNamed(RoutePaths.otpPage,
+                arguments: Tuple2(widget.phone, RoutePaths.signInPage));
           }
         },
         builder: (context, state) {
@@ -70,45 +74,44 @@ class _SignInPageState extends State<SignInPage> {
         child: Column(
           children: [
             KText(
-              text: "Chào mừng bạn đến với Beauty 360",
+              text: "Chào mừng bạn trở lại",
               textStyle: KTextStyle.titleTextStyle(),
               textAlign: TextAlign.center,
             ),
             KText(
-              text: "Vui lòng nhập mật khẩu để đăng ký",
+              text:
+                  "Vui lòng nhập mật khẩu để đăng nhập vào SĐT ${widget.phone}",
               textStyle: KTextStyle.descTextStyle(),
               textAlign: TextAlign.center,
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
-            _pinCodeInput(
-                caption: "Nhập mật khẩu",
-                onChangedCallback: (value) {
-                  signInCubit.updatePinCode(pinCode: value, source: 'input');
-                },
-                onCompletedCallback: (value) {}),
+            PinCodeWidget(
+              length: 6,
+              obscureText: true,
+              onChangedCallback: (value) {},
+              onCompletedCallback: (value) {
+                final data = {'phone_number': widget.phone, 'password': value};
+                signInCubit.signIn(endpoint: Endpoints.signIn, data: data);
+              },
+            ),
             errorMessage.isNotEmpty
                 ? KText(
-                    text: errorMessage,
+                    text: errorMessage + _wrongPasswordMsg(),
                     textStyle: KTextStyle.captionTextStyle(
                         textColor: const Color(0xFFE64646)),
                     textAlign: TextAlign.center,
+                    maxLines: 2,
                   )
                 : const SizedBox.shrink(),
             KElevatedButton(
-              text: "Đăng ký",
+              text: "Quên mật khẩu?",
               backgroundColor: hasMatched
                   ? MyColors.buttonColor
                   : MyColors.optionsColor.withOpacity(.2),
               onPressed: () {
-                final password = signInCubit.state.inputPinCode;
-                FormData formData = FormData.fromMap({
-                  'phone_number': '0902989196',
-                  'password': password,
-                  'password_confirmation': password,
-                  'gender': 'Nam'
-                });
-                signInCubit.signUp(
-                    endpoint: Endpoints.signUp, formData: formData);
+                final data = {'phone': widget.phone};
+                signInCubit.createOtp(
+                    endpoint: Endpoints.createOtp, data: data);
               },
             )
           ],
@@ -117,33 +120,12 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  Widget _pinCodeInput({
-    required String caption,
-    required Function(String)? onChangedCallback,
-    required Function(String) onCompletedCallback,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          KText(
-            text: caption,
-            textStyle: KTextStyle.captionTextStyle(),
-            padding: const EdgeInsets.only(bottom: 8),
-          ),
-          PinCodeWidget(
-            length: 6,
-            obscureText: true,
-            onChangedCallback: (value) {
-              onChangedCallback!(value);
-            },
-            onCompletedCallback: (value) {
-              onCompletedCallback(value);
-            },
-          ),
-        ],
-      ),
-    );
+  _wrongPasswordMsg() {
+    final counter = signInCubit.state.counter ?? 0;
+    String? msg = "";
+    if (counter > 0) {
+      msg = ". Bạn còn ${5 - counter} lần thử lại";
+    }
+    return msg;
   }
 }

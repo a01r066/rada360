@@ -14,14 +14,19 @@ import 'package:rada360/presentation/common/k_elevated_button.dart';
 import 'package:rada360/presentation/common/k_text.dart';
 import 'package:rada360/presentation/common/k_text_style.dart';
 import 'package:rada360/services/remote/network/endpoints.dart';
+import 'package:tuple/tuple.dart';
+
+final otpPageStateKey = GlobalKey<_OtpPageState>();
 
 class OtpPage extends StatefulWidget {
   const OtpPage({
     super.key,
-    required this.phone,
+    required this.phoneData,
   });
 
-  final String phone;
+  // Item 1: phone
+  // Item 2: RoutePath
+  final Tuple2<String, String?> phoneData;
 
   @override
   State<OtpPage> createState() => _OtpPageState();
@@ -38,6 +43,12 @@ class _OtpPageState extends State<OtpPage> {
 
   @override
   void initState() {
+    _initTimer();
+    super.initState();
+  }
+
+  _initTimer() {
+    counter = 0;
     timer = Timer.periodic(const Duration(seconds: 1), (t) {
       counter++;
       if (counter == expiredCounter) {
@@ -46,7 +57,12 @@ class _OtpPageState extends State<OtpPage> {
       }
     });
     _getRemainTimer();
-    super.initState();
+  }
+
+  clearPinCode() {
+    setState(() {
+      otpPageStateKey.currentState?.clearPinCode();
+    });
   }
 
   @override
@@ -67,12 +83,16 @@ class _OtpPageState extends State<OtpPage> {
             final response = state.dataResponse;
             bool isPhoneExist = response?.data?['is_phone_exist'] ?? false;
             if (isPhoneExist) {
-              Navigator.of(context)
-                  .pushNamed(RoutePaths.signInPage, arguments: widget.phone);
+              Navigator.of(context).pushNamed(RoutePaths.signInPage,
+                  arguments: widget.phoneData.item1);
             } else {
-              Navigator.of(context)
-                  .pushNamed(RoutePaths.registerPage, arguments: widget.phone);
+              Navigator.of(context).pushNamed(RoutePaths.registerPage,
+                  arguments: widget.phoneData.item1);
             }
+          }
+
+          if (state.status == AppStateStatus.updated) {
+            _initTimer();
           }
         },
         builder: (context, state) {
@@ -86,6 +106,7 @@ class _OtpPageState extends State<OtpPage> {
   }
 
   int _getRemainTimer() {
+    remainCounter = 10;
     remainTimer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (remainCounter > 0) {
         setState(() {
@@ -100,7 +121,7 @@ class _OtpPageState extends State<OtpPage> {
 
   _buildBody() {
     final isExpired = otpCubit.state.isExpired ?? false;
-    final phone = widget.phone;
+    final phone = widget.phoneData.item1;
     final errorMessage = otpCubit.state.errorMessage ?? "";
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -121,6 +142,7 @@ class _OtpPageState extends State<OtpPage> {
           SizedBox(
             width: MyDevices.screenWidth * .7,
             child: PinCodeWidget(
+                key: pinCodeWidgetStateKey,
                 length: 4,
                 onChangedCallback: (value) {},
                 onCompletedCallback: (value) {
@@ -144,20 +166,25 @@ class _OtpPageState extends State<OtpPage> {
                 : MyColors.buttonColor.withOpacity(.2),
             onPressed: isExpired
                 ? () {
-                    MyLogger.info("resent otp");
+                    pinCodeWidgetStateKey.currentState?.clearPinCode();
+                    final data = {'phone': widget.phoneData.item1};
+                    otpCubit.createOtp(
+                        endpoint: Endpoints.createOtp, data: data);
                   }
                 : () {},
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: KText(
-              text: "Dùng số điện thoại khác",
-              textStyle: KTextStyle.captionTextStyle(
-                  textColor: const Color(0xFFB8B8B8)),
-            ),
-          ),
+          widget.phoneData.item2 != null
+              ? const SizedBox.shrink()
+              : GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: KText(
+                    text: "Dùng số điện thoại khác",
+                    textStyle: KTextStyle.captionTextStyle(
+                        textColor: const Color(0xFFB8B8B8)),
+                  ),
+                ),
         ],
       ),
     );

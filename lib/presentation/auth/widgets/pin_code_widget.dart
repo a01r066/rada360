@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+final pinCodeWidgetStateKey = GlobalKey<_PinCodeWidgetState>();
+
 class PinCodeWidget extends StatefulWidget {
   const PinCodeWidget({
     super.key,
@@ -47,6 +49,12 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
     super.dispose();
   }
 
+  clearPinCode() {
+    setState(() {
+      textEditingController.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -86,6 +94,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget> {
         animationDuration: const Duration(milliseconds: 300),
         enableActiveFill: true,
         errorAnimationController: errorController,
+        // controller: textEditingController,
         controller: textEditingController,
         keyboardType: TextInputType.number,
         boxShadows: const [

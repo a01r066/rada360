@@ -54,7 +54,7 @@ class MyDioException implements Exception {
         // return '${error['error']}';
         return '${error['message']}';
       case 401:
-        return 'Unauthorized: ${error['message']}';
+        return '${error['message']}';
       case 403:
         return '${error['message']}';
       case 404:
@@ -64,7 +64,7 @@ class MyDioException implements Exception {
       case 502:
         return 'Bad gateway';
       default:
-        return 'Error occurred: ${error.toString()}';
+        return error.toString();
     }
   }
 

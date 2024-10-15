@@ -39,10 +39,14 @@ class ApiServices implements ApiServicesImpl {
   });
 
   @override
-  Future<ApiResult> forgetPassword(
-      {required String endpoint, required MyDataRequest request}) {
-    // TODO: implement forgetPassword
-    throw UnimplementedError();
+  Future<ApiResult<AuthDataResponse, MyDioException>> forgetPassword(
+      {required String endpoint, required MyDataRequest request}) async {
+    try {
+      final response = await dioClient.post(endpoint, data: request);
+      return ApiResult(response: AuthDataResponse.fromMap(response.data));
+    } on DioException catch (e) {
+      return ApiResult(exception: MyDioException.fromDioError(e));
+    }
   }
 
   @override
@@ -58,11 +62,11 @@ class ApiServices implements ApiServicesImpl {
   }
 
   @override
-  Future<ApiResult<AuthDataResponse, MyDioException>> signIn(
+  Future<ApiResult<CommonDataResponse, MyDioException>> signIn(
       {required String endpoint, required Map<String, dynamic> data}) async {
     try {
       final response = await dioClient.post(endpoint, data: data);
-      return ApiResult(response: AuthDataResponse.fromMap(response.data));
+      return ApiResult(response: CommonDataResponse.fromMap(response.data));
     } on DioException catch (e) {
       return ApiResult(exception: MyDioException.fromDioError(e));
     }

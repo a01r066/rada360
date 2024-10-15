@@ -41,6 +41,7 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   logger: ^2.4.0
   tuple: ^2.0.2
+  persistent_bottom_nav_bar: ^6.2.1
 
 dev_dependencies:
   flutter_test:
